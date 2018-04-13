@@ -1,6 +1,7 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const path = require('path');
+const webpack = require('webpack');
 
 module.exports ={
     entry:"./src/app.js",
@@ -10,14 +11,15 @@ module.exports ={
     },
     devServer:{
         contentBase: path.join(__dirname,"/dist"),
-        compress: true,
+        compress: false,
         port: 9000,
         stats: "errors-only",
         open: true
     },
     module:{
         rules: [{
-            test:/\.css$/, use:ExtractTextPlugin.extract({
+            test:/\.css$/, 
+            use:ExtractTextPlugin.extract({
                 fallback: "style-loader",
                 use: "css-loader",
                 publicPath: "/dist"
@@ -38,6 +40,11 @@ module.exports ={
         filename: "app.css",
         disable: false,
         allChunks: true
+    }),
+    new webpack.DefinePlugin({
+        'process.env': {
+            NODE_ENV: JSON.stringify('development')
+        }
     })
 ]    
 }
